@@ -23,6 +23,7 @@ async function run(){
         const carsCollection = database.collection("Cars");
         const ordersCollection = database.collection("Orders");
         const usersCollection = database.collection("Users");
+        const reviewsCollection = database.collection("Reviews");
 
         // get cars api
         app.get('/cars', async(req, res) => {
@@ -45,6 +46,13 @@ async function run(){
         const cursor =  ordersCollection.find({});
         const orders = await cursor.toArray();
         res.send(orders);
+      });
+
+       // GET all reviews
+      app.get('/reviews', async (req, res) => {
+        const cursor =  reviewsCollection.find({});
+        const reviews = await cursor.toArray();
+        res.send(reviews);
       });
 
     // get admins from db
@@ -80,9 +88,17 @@ async function run(){
          app.post('/users', async(req,res)=>{
             const user = req.body;
             const result = await usersCollection.insertOne(user);
+            // console.log(result);
+            res.json(result);
+        });
+
+        // post review api to db
+        app.post('/reviews', async(req,res) => {
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
             console.log(result);
             res.json(result);
-        })
+        });
 
         // update user for google log in
         app.put('/users', async(req,res)=>{
@@ -121,7 +137,16 @@ async function run(){
             const result = await ordersCollection.deleteOne(query);
             console.log(query,result);
             res.json(1);
-        })
+        });
+
+        //DELETE car API
+        app.delete('/cars/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await carsCollection.deleteOne(query);
+            console.log(query,result);
+            res.json(1);
+        });
 
 
 
