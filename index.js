@@ -35,7 +35,6 @@ async function run(){
        // GET SINGLE car
       app.get('/carDetails/:id', async (req, res) => {
         const id = req.params.id;
-        console.log('hitting single car ',id);
         const query = {_id: ObjectId(id)};
         const car = await carsCollection.findOne(query);
         res.json(car);
@@ -71,7 +70,6 @@ async function run(){
         app.post('/cars', async(req, res) => {
             const cars = req.body;
             const result = await carsCollection.insertOne(cars);
-            console.log(cars,result);
             res.send(result);
         });
 
@@ -79,7 +77,6 @@ async function run(){
         app.post('/orders', async(req, res) => {
             const orders = req.body;
             const result = await ordersCollection.insertOne(orders);
-            console.log(orders,result);
             res.send(result);
         });
 
@@ -88,7 +85,6 @@ async function run(){
          app.post('/users', async(req,res)=>{
             const user = req.body;
             const result = await usersCollection.insertOne(user);
-            // console.log(result);
             res.json(result);
         });
 
@@ -96,7 +92,6 @@ async function run(){
         app.post('/reviews', async(req,res) => {
             const review = req.body;
             const result = await reviewsCollection.insertOne(review);
-            console.log(result);
             res.json(result);
         });
 
@@ -114,28 +109,17 @@ async function run(){
         // update admin role
         app.put('/users/admin', async(req,res)=>{
             const user = req.body;
-            console.log(user);
             const filter = { email: user.email };
             const updateDoc = { $set:{ role: 'admin'} };
             const result = await usersCollection.updateOne(filter, updateDoc);
             res.json(result);
-
         });
-
-
-
-
-
-
-
-
 
         //DELETE order API
         app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const result = await ordersCollection.deleteOne(query);
-            console.log(query,result);
             res.json(1);
         });
 
@@ -144,16 +128,8 @@ async function run(){
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const result = await carsCollection.deleteOne(query);
-            console.log(query,result);
             res.json(1);
         });
-
-
-
-
-
-
-
 
     }
     finally{
@@ -161,8 +137,6 @@ async function run(){
     }
 }
 run().catch(console.dir);
-
-
 
 app.get('/', (req,res)=>{
     res.send('Welcome to Premium-Motors server');
